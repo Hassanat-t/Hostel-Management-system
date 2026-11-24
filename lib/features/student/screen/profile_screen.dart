@@ -15,6 +15,7 @@ import 'package:newhms/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../authgate.dart';
+import 'package:newhms/services/firebase_refs.dart';
 
 class ProfileScreen extends StatefulWidget {
   // Make the constructor parameterless
@@ -128,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.only(right: 20.0),
             child: InkWell(
               onTap: () async {
-                await FirebaseAuth.instance.signOut();
+                await FirebaseRefs.auth.signOut();
                 // Clear the user from provider
                 final userProvider = Provider.of<UserProvider>(context, listen: false);
                 userProvider.clearUser();
@@ -249,12 +250,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               heightSpacer(20),
               // --- Editable Fields (initialized with dummy values) ---
               CustomTextField(
+                key: const Key('profile_username'),
                 controller: usernameController,
                 inputHint: user.username,
                 prefixIcon: const Icon(Icons.person_2_outlined),
               ),
               heightSpacer(20),
               CustomTextField(
+                key: const Key('profile_phone'),
                 controller: phoneNumberController,
                 inputHint: user.phoneNumber,
                 prefixIcon: const Icon(Icons.phone_outlined),
@@ -264,6 +267,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Expanded(
                     child: CustomTextField(
+                        key: const Key('profile_first_name'),
                       controller: firstNameController,
                       inputHint: user.firstName,
                     ),
@@ -271,6 +275,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   widthSpacer(20),
                   Expanded(
                     child: CustomTextField(
+                        key: const Key('profile_last_name'),
                       controller: lastNameController,
                       inputHint: user.lastName,
                     ),
@@ -280,6 +285,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               heightSpacer(40),
               // --- Save Button ---
               CustomButton(
+                key: const Key('profile_update_button'),
                 press:_isUpdating ? (){} : () => _handleUpdateProfile(context),
                 child: _isUpdating
                     ? const SizedBox(

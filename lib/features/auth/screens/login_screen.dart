@@ -18,6 +18,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../models/user_model.dart';
+import 'package:newhms/services/firebase_refs.dart';
 
 
 //import 'package:provider/provider.dart';
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       try {
         // Sign in with Firebase Auth
-        UserCredential userCredential = await FirebaseAuth.instance
+        UserCredential userCredential = await FirebaseRefs.auth
             .signInWithEmailAndPassword(
             email: email.text.trim(), password: password.text.trim());
 
@@ -54,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if (user != null) {
           // Get user role from Firestore
-          DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          DocumentSnapshot userDoc = await FirebaseRefs.firestore
               .collection('users')
               .doc(user.uid.trim())
               .get();
@@ -77,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
             // Navigate with role
             Navigator.pop(context);
           } else {
-            FirebaseAuth.instance.signOut();
+            FirebaseRefs.auth.signOut();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("User record not found in Firestore")),
             );
@@ -145,6 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   heightSpacer(15),
                   CustomTextField(
+                    key: const Key('login_email'),
                     controller: email,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -167,6 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   heightSpacer(15),
                   CustomTextField(
+                    key: const Key('login_password'),
                     controller: password,
                     obscureText: _obscurePassword,
                     enabledBorder: OutlineInputBorder(
@@ -193,6 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   heightSpacer(30),
                   CustomButton(
+                    key: const Key('login_button'),
                     buttonTextColor: Colors.white,
                     size: 16,
                       press: _isLoggingIn

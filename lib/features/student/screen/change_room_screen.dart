@@ -125,6 +125,7 @@ class _ChangeRoomScreenState extends State<ChangeRoomScreen> {
                             ),
                           ),
                           child: DropdownButton<String>(
+                              key: const Key('change_room_block'),
                             // elevation: 0,
                             underline: const SizedBox(),
                             isExpanded: true,
@@ -157,6 +158,7 @@ class _ChangeRoomScreenState extends State<ChangeRoomScreen> {
                             ),
                           ),
                           child: DropdownButton<String>(
+                              key: const Key('change_room_room'),
                             // elevation: 0,
                             underline: const SizedBox(),
                             isExpanded: true,
@@ -191,11 +193,13 @@ class _ChangeRoomScreenState extends State<ChangeRoomScreen> {
                   ),
                   heightSpacer(10),
                   CustomTextField(
+                    key: const Key('change_room_reason'),
                     controller: reason,
                     inputHint: 'Write your reason',
                   ),
                   heightSpacer(40),
                   CustomButton(
+                    key: const Key('change_room_submit'),
                     press: () {},
                     buttonText: 'Submit',
                   )

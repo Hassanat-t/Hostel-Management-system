@@ -38,6 +38,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../models/user_model.dart';
 import 'package:newhms/features/auth/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:newhms/services/firebase_refs.dart';
 
 class UserProvider with ChangeNotifier {
   UserModel? _user;
@@ -46,9 +47,9 @@ class UserProvider with ChangeNotifier {
 
   // Load current user's data from Firestore
   Future<void> loadUser() async {
-    User? firebaseUser = FirebaseAuth.instance.currentUser;
+    User? firebaseUser = FirebaseRefs.auth.currentUser;
     if (firebaseUser != null) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
+      DocumentSnapshot doc = await FirebaseRefs.firestore
           .collection('users')
           .doc(firebaseUser.uid)
           .get();
@@ -80,7 +81,7 @@ class UserProvider with ChangeNotifier {
     if (_user == null) return;
 
     try {
-      final docRef = FirebaseFirestore.instance.collection('users').doc(_user!.uid);
+      final docRef = FirebaseRefs.firestore.collection('users').doc(_user!.uid);
 
       await docRef.update({
         'username': username,
@@ -105,7 +106,7 @@ class UserProvider with ChangeNotifier {
 
   // Logout user from Firebase and clear local data
   Future<void> logout(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
+    await FirebaseRefs.auth.signOut();
     clearUser();
 
     // Optionally: navigate to login screen

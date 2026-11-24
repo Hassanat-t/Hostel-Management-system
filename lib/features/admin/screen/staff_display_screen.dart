@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:newhms/models/user_model.dart';
 
 import 'package:newhms/utils/string_extensions.dart';
+import 'package:newhms/services/firebase_refs.dart';
 
 class StaffInfoScreen extends StatefulWidget {
   const StaffInfoScreen({super.key});
@@ -29,7 +30,7 @@ class _StaffInfoScreenState extends State<StaffInfoScreen> {
 
   Future<void> fetchStaff() async {
     try {
-      final querySnapshot = await FirebaseFirestore.instance
+      final querySnapshot = await FirebaseRefs.firestore
           .collection('users')
           .where('role', isEqualTo: 'staff')
           .orderBy('createdAt', descending: true)

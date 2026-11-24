@@ -11,6 +11,7 @@ import '../../../providers/user_provider.dart';
 import '../../../models/user_model.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:newhms/services/firebase_refs.dart';
 
 class RaiseIssueScreen extends StatefulWidget {
   const RaiseIssueScreen({super.key});
@@ -64,7 +65,7 @@ class _RaiseIssueScreenState extends State<RaiseIssueScreen> {
       isSubmitting = true;
     });
     try {
-      await FirebaseFirestore.instance.collection('issues').add({
+      await FirebaseRefs.firestore.collection('issues').add({
         'uid': user.uid,
         'roomNumber': user.room ?? '',
         'block': user.block ?? '',
@@ -248,6 +249,7 @@ class _RaiseIssueScreenState extends State<RaiseIssueScreen> {
                     ),
                   ),
                   child: DropdownButton<String>(
+                      key: const Key('raise_issue_type'),
                     // elevation: 0,
                     underline: const SizedBox(),
                     isExpanded: true,
@@ -269,6 +271,7 @@ class _RaiseIssueScreenState extends State<RaiseIssueScreen> {
                 Text('Comment', style: AppTextTheme.kLabelStyle),
                 heightSpacer(15),
                 CustomTextField(
+                  key: const Key('raise_issue_comment'),
                   controller: studentComment,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -282,6 +285,7 @@ class _RaiseIssueScreenState extends State<RaiseIssueScreen> {
                 ),
                 heightSpacer(40),
                 CustomButton(
+                  key: const Key('raise_issue_submit'),
                     press: isSubmitting ? (){} : submitIssue,
                     child: isSubmitting
                         ? const SizedBox(

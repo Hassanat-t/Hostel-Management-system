@@ -5,13 +5,14 @@ import 'package:newhms/features/home/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/user_provider.dart';
+import 'package:newhms/services/firebase_refs.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
   Future<String?> _getUserRole(String uid) async {
     try {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
+      DocumentSnapshot doc = await FirebaseRefs.firestore
           .collection('users')
           .doc(uid)
           .get();
@@ -29,7 +30,7 @@ class AuthGate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+      stream: FirebaseRefs.auth.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -50,7 +51,7 @@ class AuthGate extends StatelessWidget {
             // Still return login if somehow user data wasn't set
             final userProvider = Provider.of<UserProvider>(context, listen: false);
             if (userProvider.user == null) {
-              FirebaseAuth.instance.signOut(); // Optional: clean up session
+              FirebaseRefs.auth.signOut(); // Optional: clean up session
               return const LoginScreen();
             }
 

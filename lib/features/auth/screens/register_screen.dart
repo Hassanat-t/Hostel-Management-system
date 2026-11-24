@@ -15,6 +15,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../models/user_model.dart';
+import 'package:newhms/services/firebase_refs.dart';
 
 
 class RegisterScreen extends StatefulWidget {
@@ -83,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
 
       try {
-        UserCredential userCredential = await FirebaseAuth.instance
+        UserCredential userCredential = await FirebaseRefs.auth
             .createUserWithEmailAndPassword(
           email: email.text.trim(),
           password: password.text.trim(),
@@ -93,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         if (user != null) {
           try {
-            await FirebaseFirestore.instance.collection('users')
+            await FirebaseRefs.firestore.collection('users')
                 .doc(user.uid)
                 .set({
               'uid': user.uid,
@@ -194,6 +195,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: AppTextTheme.kLabelStyle,
                   ),
                   CustomTextField(
+                    key: const Key('register_username'),
                     controller: username,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -215,6 +217,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: AppTextTheme.kLabelStyle,
                   ),
                   CustomTextField(
+                    key: const Key('register_first_name'),
                     controller: firstName,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -236,6 +239,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: AppTextTheme.kLabelStyle,
                   ),
                   CustomTextField(
+                    key: const Key('register_last_name'),
                     controller: lastName,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -257,6 +261,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: AppTextTheme.kLabelStyle,
                   ),
                   CustomTextField(
+                    key: const Key('register_email'),
                     controller: email,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -278,6 +283,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: AppTextTheme.kLabelStyle,
                   ),
                   CustomTextField(
+                    key: const Key('register_password'),
                     obscureText: true,
                     controller: password,
                     enabledBorder: OutlineInputBorder(
@@ -300,6 +306,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: AppTextTheme.kLabelStyle,
                   ),
                   CustomTextField(
+                    key: const Key('register_phone'),
                     controller: phoneNumber,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -344,6 +351,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             SizedBox(width: 8.w),
                             DropdownButton<String>(
+                              key: const Key('register_block'),
                               value: selectedBlock,
                               onChanged: (String? newValue) {
                                 setState(() {
@@ -394,6 +402,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             const SizedBox(width: 8),
                             DropdownButton<String>(
+                              key: const Key('register_room'),
                               value: selectedRoom,
                               onChanged: (String? newValue) {
                                 setState(() {
@@ -415,6 +424,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   heightSpacer(25),
 
                   CustomButton(
+                    key: const Key('register_button'),
                     press: _isLoading ? (){} : _registerUser,
                     child: _isLoading
                         ? const SizedBox(

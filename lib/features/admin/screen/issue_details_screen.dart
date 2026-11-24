@@ -5,6 +5,7 @@ import 'package:newhms/common/constants.dart';
 import 'package:newhms/common/spacing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:newhms/models/issue_model.dart';
+import 'package:newhms/services/firebase_refs.dart';
 
 class IssueScreen extends StatefulWidget {
   const IssueScreen({super.key});
@@ -15,7 +16,7 @@ class IssueScreen extends StatefulWidget {
 
 class _IssueScreenState extends State<IssueScreen> {
   Future<List<IssueModel>> _fetchIssues() async {
-    final snapshot = await FirebaseFirestore.instance
+    final snapshot = await FirebaseRefs.firestore
         .collection('issues')
         .orderBy('timestamp', descending: true)
         .get();

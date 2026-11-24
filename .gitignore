@@ -41,3 +41,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# LLM-generated tests (the record is kept in the llm-flutter-testgen repo)
+test/generated/

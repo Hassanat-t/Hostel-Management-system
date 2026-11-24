@@ -13,6 +13,7 @@ import '../../../models/user_model.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:newhms/services/firebase_refs.dart';
 
 class CreateStaff extends StatefulWidget {
   const CreateStaff({super.key});
@@ -37,13 +38,13 @@ class _CreateStaffState extends State<CreateStaff> {
   Future<void> createStaffAccount(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       try {
-        final credential = await FirebaseAuth.instance
+        final credential = await FirebaseRefs.auth
             .createUserWithEmailAndPassword(
           email: email.text.trim(),
           password: password.text.trim(),
         );
 
-        await FirebaseFirestore.instance
+        await FirebaseRefs.firestore
             .collection('users')
             .doc(credential.user!.uid)
             .set({
@@ -127,6 +128,7 @@ class _CreateStaffState extends State<CreateStaff> {
               children: [
                 Text('Username', style: AppTextTheme.kLabelStyle),
                 CustomTextField(
+                  key: const Key('staff_username'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Username is required';
@@ -141,6 +143,7 @@ class _CreateStaffState extends State<CreateStaff> {
                 heightSpacer(15),
                 Text('First Name', style: AppTextTheme.kLabelStyle),
                 CustomTextField(
+                  key: const Key('staff_first_name'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'First Name is required';
@@ -156,6 +159,7 @@ class _CreateStaffState extends State<CreateStaff> {
                 heightSpacer(15),
                 Text('Last Name', style: AppTextTheme.kLabelStyle),
                 CustomTextField(
+                  key: const Key('staff_last_name'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Last Name is required';
@@ -170,6 +174,7 @@ class _CreateStaffState extends State<CreateStaff> {
                 heightSpacer(15),
                 Text('Job Role', style: AppTextTheme.kLabelStyle),
                 CustomTextField(
+                  key: const Key('staff_job_role'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Job Role is required';
@@ -184,6 +189,7 @@ class _CreateStaffState extends State<CreateStaff> {
                 heightSpacer(15),
                 Text('Email', style: AppTextTheme.kLabelStyle),
                 CustomTextField(
+                  key: const Key('staff_email'),
                   controller: email,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -200,6 +206,7 @@ class _CreateStaffState extends State<CreateStaff> {
                 heightSpacer(15),
                 Text('Password', style: AppTextTheme.kLabelStyle),
                 CustomTextField(
+                  key: const Key('staff_password'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Password is required';
@@ -214,6 +221,7 @@ class _CreateStaffState extends State<CreateStaff> {
                 heightSpacer(15),
                 Text('Phone Number', style: AppTextTheme.kLabelStyle),
                 CustomTextField(
+                  key: const Key('staff_phone'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Phone Number is required';
@@ -227,6 +235,7 @@ class _CreateStaffState extends State<CreateStaff> {
                 ),
                 heightSpacer(40),
                 CustomButton(
+                  key: const Key('create_staff_button'),
                   press: _isLoading
                       ? (){}
                       :
